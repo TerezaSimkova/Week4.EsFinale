@@ -32,32 +32,21 @@ namespace Week4.EsFinale.EF.Migrations
                     DateOfOrder = table.Column<DateTime>(nullable: false),
                     ProductCode = table.Column<string>(maxLength: 15, nullable: false),
                     ToPay = table.Column<decimal>(nullable: false),
-                    _CustomerId = table.Column<int>(nullable: true)
+                    IdCustomer = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Order", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Order_Customer__CustomerId",
-                        column: x => x._CustomerId,
-                        principalTable: "Customer",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Order__CustomerId",
-                table: "Order",
-                column: "_CustomerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Order");
+                name: "Customer");
 
             migrationBuilder.DropTable(
-                name: "Customer");
+                name: "Order");
         }
     }
 }

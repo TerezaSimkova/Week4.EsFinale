@@ -10,7 +10,7 @@ using Week4.EsFinale.EF;
 namespace Week4.EsFinale.EF.Migrations
 {
     [DbContext(typeof(OrderContext))]
-    [Migration("20211015094003_firstMigration")]
+    [Migration("20211015134243_firstMigration")]
     partial class firstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,6 +58,9 @@ namespace Week4.EsFinale.EF.Migrations
                     b.Property<DateTime>("DateOfOrder")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("IdCustomer")
+                        .HasColumnType("int");
+
                     b.Property<string>("OrderCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)")
@@ -71,21 +74,9 @@ namespace Week4.EsFinale.EF.Migrations
                     b.Property<decimal>("ToPay")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("_CustomerId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("_CustomerId");
-
                     b.ToTable("Order");
-                });
-
-            modelBuilder.Entity("Week4.EsFinale.Core.Models.Order", b =>
-                {
-                    b.HasOne("Week4.EsFinale.Core.Models.Customer", "_Customer")
-                        .WithMany("orders")
-                        .HasForeignKey("_CustomerId");
                 });
 #pragma warning restore 612, 618
         }

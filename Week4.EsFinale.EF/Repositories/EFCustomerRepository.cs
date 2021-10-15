@@ -44,7 +44,8 @@ namespace Week4.EsFinale.EF.Repositories
 
         public List<Customer> FetchAll()
         {
-            return ctx.Customers.Include(c => c.orders).ToList();
+            return ctx.Customers.ToList();
+            //Include(c => c.orders).
         }
 
         public Customer GetById(int id)

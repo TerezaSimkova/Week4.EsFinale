@@ -18,8 +18,6 @@ namespace Week4.EsFinale.Core.Models
         public string Name { get; set; }
         [DataMember]
         public string Surname { get; set; }
-        [DataMember]
-        public List<Order> orders { get; set; } = new List<Order>();
 
     }
 }

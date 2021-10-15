@@ -24,11 +24,11 @@ namespace Week4.EsFinale.EF.Repositories
 
         public bool Add(Order item)
         {
-            var custom = ctx.Customers.FirstOrDefault(c => c.Id == item._Customer.Id);
-            if (custom != null)
-            {
-                item._Customer =custom;
-            }
+            ////var custom = ctx.Customers.FirstOrDefault(c => c.Id == item._Customer.Id);
+            //if (custom != null)
+            //{
+            //    item._Customer =custom;
+            //}
             if (item == null)
             {
                 return false;

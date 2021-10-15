@@ -24,10 +24,6 @@ namespace Week4.EsFinale.EF.Configurations
                 .Property(b => b.ProductCode)
                 .HasMaxLength(15)
                 .IsRequired();
-
-            builder
-                 .HasOne(c => c._Customer)
-                 .WithMany(o => o.orders);
         }
     }
 }
