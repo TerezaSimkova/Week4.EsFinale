@@ -41,10 +41,10 @@ namespace Week4.EsFinale.Client
                         DeleteOrder();
                         break;
                     case '3':
-                        //EditOrder();
+                        EditOrder();
                         break;
                     case '4':
-                        //FetchOrders();
+                        FetchOrders();
                         break;
                     case '5':
                         //AddNewCustomer();
@@ -68,6 +68,81 @@ namespace Week4.EsFinale.Client
 
             } while (!quit);
 
+        }
+
+        private static void EditOrder()
+        {
+            FetchOrders();
+            string codiceOrdine = string.Empty;
+            do
+            {
+                Console.WriteLine("Scegli codice ordine che vuoi modificare:");
+                codiceOrdine = Console.ReadLine();
+
+            } while (string.IsNullOrEmpty(codiceOrdine));
+
+            HttpClient client = new HttpClient();
+            HttpRequestMessage postRequest = new HttpRequestMessage
+            {
+                Method = HttpMethod.Put,
+                RequestUri = new Uri($"https://localhost:44371/api/order/{codiceOrdine}")
+            };
+
+            var orderCode = GetData("orderCode");
+            DateTime dt = GetDataOrder();
+            var productCode = GetData("productCode");
+            var payment = GetPay();
+
+            OrderContract updatedOrder = new OrderContract()
+            {
+                OrderCode = orderCode,
+                DateOfOrder = dt,
+                ProductCode = productCode,
+                ToPay = payment,
+            };
+            string updatedOrderJson = JsonConvert.SerializeObject(updatedOrder);
+
+            postRequest.Content = new StringContent(
+                updatedOrderJson,
+                Encoding.UTF8,
+                "application/json"
+            );
+
+            HttpResponseMessage putResponse = client.SendAsync(postRequest).Result;
+            if (putResponse.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                string data = putResponse.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<OrderContract>(data);
+
+                Console.WriteLine($"Ordine: {result.OrderCode} -> modificato con successo!");
+            }
+        }
+
+        private static List<OrderContract> FetchOrders()
+        {
+            HttpClient client = new HttpClient(); 
+
+            HttpRequestMessage request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri("https://localhost:44371/api/order")
+            };
+
+            HttpResponseMessage response = client.SendAsync(request).Result;
+            List<OrderContract> result = new List<OrderContract>();
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+
+                result = JsonConvert.DeserializeObject<List<OrderContract>>(data);
+
+                foreach (OrderContract o in result)
+                {
+                    Console.WriteLine($"Id:{o.Id},Order Code: {o.OrderCode},Codice prodotto: {o.ProductCode}, Pay:{o.ToPay}");
+                }
+            }
+            return result;
         }
 
         private static void DeleteOrder()

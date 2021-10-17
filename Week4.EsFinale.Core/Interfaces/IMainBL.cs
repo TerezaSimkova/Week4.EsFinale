@@ -11,7 +11,7 @@ namespace Week4.EsFinale.Core.Interfaces
         //Metodi per gli ordini
         List<Order> FetchOrders();
         bool CreateOrder(Order newOrder);
-        bool EditOrder(Order editedOrder);
+        bool EditOrder(Order editedOrder, Order orderCode);
         bool DeleteOrder(int id);
 
         Order GetOrderById(int id);

@@ -75,11 +75,17 @@ namespace Week4.EsFinale.EF.Repositories
 
         public bool Update(Order item)
         {
-            var oldOrder = ctx.Orders.FirstOrDefault(p => p.Id == item.Id);
-            oldOrder.DateOfOrder = item.DateOfOrder;
-            oldOrder.OrderCode = item.OrderCode;
-            oldOrder.ProductCode = item.ProductCode;
-            oldOrder.ToPay = item.ToPay;
+            throw new NotImplementedException();
+        }
+
+        public bool UpdateOrder(Order updated, Order old)
+        {
+            var oldOrder = ctx.Orders.FirstOrDefault(p => p.Id == old.Id);
+            oldOrder.Id = old.Id;
+            oldOrder.OrderCode = updated.OrderCode;
+            oldOrder.DateOfOrder = updated.DateOfOrder;
+            oldOrder.ProductCode = updated.ProductCode;
+            oldOrder.ToPay = updated.ToPay;
             ctx.SaveChanges();
             return true;
         }

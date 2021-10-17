@@ -56,9 +56,9 @@ namespace Week4.EsFinale.Core.BusinessLayer
         {
             return orderRepo.Delete(id);
         }
-        public bool EditOrder(Order editedOrder)
+        public bool EditOrder(Order editedOrder, Order orderCode)
         {
-            return orderRepo.Update(editedOrder);
+            return orderRepo.UpdateOrder(editedOrder, orderCode);
         }
 
         public List<Order> FetchOrders()

@@ -66,23 +66,16 @@ namespace Week4.EsFinale.API.Controllers
         }
 
         // PUT api/Order/5
-        [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Order order)
+        [HttpPut("{codiceOrdine}")]
+        public IActionResult Put(string codiceOrdine, [FromBody] Order order)
         {
-            if (id <= 0 || order == null)
+            var orderCode = mainBusinessLayer.GetOrderByCodice(codiceOrdine);
+
+            if (orderCode != null)
             {
-                return BadRequest("Prestito invalido o inesistente!");
-            }
-            if (id != order.Id)
-            {
-                return BadRequest("Id non combaciono!");
+                 mainBusinessLayer.EditOrder(order,orderCode);
             }
 
-            var orderToUpdate = mainBusinessLayer.EditOrder(order);
-            if (orderToUpdate == false)
-            {
-                return BadRequest("Prestito non puo essere modificato!");
-            }
             return Ok(order);
         }
 
@@ -104,6 +97,6 @@ namespace Week4.EsFinale.API.Controllers
             return Ok(orderToDelete);
         }
 
-        
+
     }
 }
