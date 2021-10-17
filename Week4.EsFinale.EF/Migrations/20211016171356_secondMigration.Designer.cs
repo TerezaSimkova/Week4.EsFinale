@@ -10,8 +10,8 @@ using Week4.EsFinale.EF;
 namespace Week4.EsFinale.EF.Migrations
 {
     [DbContext(typeof(OrderContext))]
-    [Migration("20211015134243_firstMigration")]
-    partial class firstMigration
+    [Migration("20211016171356_secondMigration")]
+    partial class secondMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -76,7 +76,18 @@ namespace Week4.EsFinale.EF.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IdCustomer");
+
                     b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("Week4.EsFinale.Core.Models.Order", b =>
+                {
+                    b.HasOne("Week4.EsFinale.Core.Models.Customer", "_customer")
+                        .WithMany("orders")
+                        .HasForeignKey("IdCustomer")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

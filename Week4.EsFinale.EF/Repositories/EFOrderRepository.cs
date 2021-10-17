@@ -24,15 +24,16 @@ namespace Week4.EsFinale.EF.Repositories
 
         public bool Add(Order item)
         {
-            ////var custom = ctx.Customers.FirstOrDefault(c => c.Id == item._Customer.Id);
-            //if (custom != null)
-            //{
-            //    item._Customer =custom;
-            //}
+            var custom = ctx.Customers.Include(c => c.orders).FirstOrDefault(c => c.Id == item.IdCustomer);
+            if (custom != null)
+            {
+                item.IdCustomer = custom.Id;
+            }
             if (item == null)
             {
                 return false;
             }
+            
             ctx.Orders.Add(item);
             ctx.SaveChanges();
             return true;
@@ -47,9 +48,24 @@ namespace Week4.EsFinale.EF.Repositories
             return true;
         }
 
+        public bool DeleteOrder(string c)
+        {
+            Order order = ctx.Orders.FirstOrDefault(o => o.OrderCode == c);
+            ctx.Orders.Remove(order);
+            ctx.SaveChanges();
+            return true;
+        }
+
         public List<Order> FetchAll()
         {
             return ctx.Orders.ToList();
+        }
+
+        public Order GetByCode(string codiceOrdine)
+        {
+            Order order = ctx.Orders.FirstOrDefault(o => o.OrderCode == codiceOrdine);
+            return order;
+
         }
 
         public Order GetById(int id)
@@ -60,7 +76,10 @@ namespace Week4.EsFinale.EF.Repositories
         public bool Update(Order item)
         {
             var oldOrder = ctx.Orders.FirstOrDefault(p => p.Id == item.Id);
-            oldOrder = item;
+            oldOrder.DateOfOrder = item.DateOfOrder;
+            oldOrder.OrderCode = item.OrderCode;
+            oldOrder.ProductCode = item.ProductCode;
+            oldOrder.ToPay = item.ToPay;
             ctx.SaveChanges();
             return true;
         }

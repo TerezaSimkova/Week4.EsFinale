@@ -26,6 +26,7 @@ namespace Week4.EsFinale.Core.Interfaces
         bool DeleteCustomer(int id);
        
         Customer GetCustomerById(int id);
+        Order GetOrderByCodice(string codiceOrdine);
         #endregion
     }
 }

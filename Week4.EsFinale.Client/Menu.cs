@@ -38,7 +38,7 @@ namespace Week4.EsFinale.Client
                         AddNewOrder();
                         break;
                     case '2':
-                        //DeleteOrder();
+                        DeleteOrder();
                         break;
                     case '3':
                         //EditOrder();
@@ -70,6 +70,30 @@ namespace Week4.EsFinale.Client
 
         }
 
+        private static void DeleteOrder()
+        {
+            string orderToDelete = string.Empty;
+            do
+            {
+                Console.WriteLine("Scegli codice ordine che vuoi cancellare:");
+                orderToDelete = Console.ReadLine();
+
+            } while (string.IsNullOrEmpty(orderToDelete));
+
+            HttpClient client = new HttpClient();
+            HttpRequestMessage postRequest = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri($"https://localhost:44371/api/order/{orderToDelete}" )
+            };
+            HttpResponseMessage postResponse = client.SendAsync(postRequest).Result;
+            if (postResponse.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                Console.WriteLine("Ordine cancellato!");
+            }
+
+        }
+
         private static void AddNewOrder()
         {
             string orderCode = GetData("codice ordine");
@@ -90,7 +114,7 @@ namespace Week4.EsFinale.Client
                 OrderCode = orderCode,
                 ProductCode = productCode,
                 DateOfOrder = dt,
-                ToPay=toPay,
+                ToPay = toPay,
                 IdCustomer = idCustomer
             };
 

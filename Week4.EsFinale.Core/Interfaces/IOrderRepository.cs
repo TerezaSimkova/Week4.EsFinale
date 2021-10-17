@@ -7,5 +7,7 @@ namespace Week4.EsFinale.Core.Interfaces
 {
    public interface IOrderRepository : IRepository<Order>
     {
+        bool DeleteOrder(string c);
+        Order GetByCode(string codiceOrdine);
     }
 }

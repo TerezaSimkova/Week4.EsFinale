@@ -87,14 +87,20 @@ namespace Week4.EsFinale.API.Controllers
         }
 
         // DELETE api/order/5
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete("{codiceOrdine}")]
+        public IActionResult Delete(string codiceOrdine, int id)
         {
-            if (id <= 0)
+            if (codiceOrdine == null)
             {
-                return BadRequest("Id non valido!");
+                return BadRequest("Codice non valido!");
             }
-            var orderToDelete = mainBusinessLayer.DeleteOrder(id);
+            var getOrdeByCode = mainBusinessLayer.GetOrderByCodice(codiceOrdine);
+            var orderToDelete = true;
+            if (getOrdeByCode != null)
+            {
+                orderToDelete = mainBusinessLayer.DeleteOrder(getOrdeByCode.Id);
+
+            }
             return Ok(orderToDelete);
         }
 

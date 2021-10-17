@@ -71,7 +71,12 @@ namespace Week4.EsFinale.Core.BusinessLayer
             return orderRepo.GetById(id);
         }
 
-       
+        public Order GetOrderByCodice(string codiceOrdine)
+        {
+            return orderRepo.GetByCode(codiceOrdine);
+        }
+
+
 
         #endregion
     }

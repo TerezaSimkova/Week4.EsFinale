@@ -37,16 +37,27 @@ namespace Week4.EsFinale.EF.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Order", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Order_Customer_IdCustomer",
+                        column: x => x.IdCustomer,
+                        principalTable: "Customer",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_IdCustomer",
+                table: "Order",
+                column: "IdCustomer");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Customer");
+                name: "Order");
 
             migrationBuilder.DropTable(
-                name: "Order");
+                name: "Customer");
         }
     }
 }

@@ -39,10 +39,10 @@ namespace Week4.EsFinale.API
                 options.SerializerSettings.ReferenceLoopHandling =
                 Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
-
-            services.AddTransient<IMainBL, MainBL>();
-            services.AddTransient<IOrderRepository, EFOrderRepository>();
-            services.AddTransient<ICustomerRepository, EFCustomerRepository>();
+    
+            services.AddScoped<IMainBL, MainBL>();
+            services.AddScoped<IOrderRepository, EFOrderRepository>();
+            services.AddScoped<ICustomerRepository, EFCustomerRepository>();
 
             services.AddDbContext<OrderContext>(options =>
             {

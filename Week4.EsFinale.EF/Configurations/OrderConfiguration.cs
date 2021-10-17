@@ -24,6 +24,9 @@ namespace Week4.EsFinale.EF.Configurations
                 .Property(b => b.ProductCode)
                 .HasMaxLength(15)
                 .IsRequired();
+
+            builder
+                 .HasOne(o => o._customer).WithMany(c => c.orders).HasForeignKey(o => o.IdCustomer);
         }
     }
 }

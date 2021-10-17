@@ -19,7 +19,7 @@ namespace Week4.EsFinale.EF
         public OrderContext(DbContextOptions<OrderContext> options)
             : base(options)
         {
-
+           
         }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
@@ -28,6 +28,7 @@ namespace Week4.EsFinale.EF
                 string connectionString = @"Server=(localdb)\mssqllocaldb;
 		    Database=OrdersDb;Trusted_Connection=True;";
                 options.UseSqlServer(connectionString);
+                options.EnableSensitiveDataLogging();
             }
         }
 
