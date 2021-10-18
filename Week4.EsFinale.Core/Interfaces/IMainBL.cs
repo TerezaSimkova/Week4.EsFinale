@@ -22,11 +22,12 @@ namespace Week4.EsFinale.Core.Interfaces
         //Metodi per i clienti
         List<Customer> FetchCustomers();
         bool CreateCustomer(Customer newCustomer);
-        bool EditCustomer(Customer editedCustomer);
+        bool EditCustomer(Customer editedCustomer, Customer customerCode);
         bool DeleteCustomer(int id);
        
         Customer GetCustomerById(int id);
         Order GetOrderByCodice(string codiceOrdine);
+        Customer GetCustomerByCodice(string codiceCustomer);
         #endregion
     }
 }

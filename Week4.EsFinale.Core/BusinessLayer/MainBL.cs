@@ -43,6 +43,12 @@ namespace Week4.EsFinale.Core.BusinessLayer
         {
             return customerRepo.GetById(id);
         }
+
+        public Customer GetCustomerByCodice(string codiceCustomer)
+        {
+            return customerRepo.GetByCode(codiceCustomer);
+        }
+
         #endregion
 
         #region Orders
@@ -75,6 +81,12 @@ namespace Week4.EsFinale.Core.BusinessLayer
         {
             return orderRepo.GetByCode(codiceOrdine);
         }
+
+        public bool EditCustomer(Customer editedCustomer, Customer customerCode)
+        {
+            return customerRepo.UpdateCustomer(editedCustomer, customerCode);
+        }
+
 
 
 

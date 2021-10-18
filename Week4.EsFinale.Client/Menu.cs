@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using Week4.EsFinale.Client.Contract;
+using Week4.EsFinale.Core.Models;
 
 namespace Week4.EsFinale.Client
 {
@@ -47,16 +48,16 @@ namespace Week4.EsFinale.Client
                         FetchOrders();
                         break;
                     case '5':
-                        //AddNewCustomer();
+                        AddNewCustomer();
                         break;
                     case '6':
-                        //DeleteCustomer();
+                        DeleteCustomer();
                         break;
                     case '7':
-                        //EditCustomer();
+                        EditCustomer();
                         break;
                     case '8':
-                        //FetchCustomers();
+                        FetchCustomers();
                         break;
                     case 'q':
                         quit = true;
@@ -68,6 +69,154 @@ namespace Week4.EsFinale.Client
 
             } while (!quit);
 
+        }
+
+        private static List<CustomerContract> FetchCustomers()
+        {
+            HttpClient client = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri("https://localhost:44371/api/customer")
+            };
+
+            HttpResponseMessage response = client.SendAsync(request).Result;
+            List<CustomerContract> result = new List<CustomerContract>();
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+
+                result = JsonConvert.DeserializeObject<List<CustomerContract>>(data);
+
+                foreach (CustomerContract c in result)
+                {
+                    Console.WriteLine($"Id:{c.Id},Customer Code: {c.CustomerCode},Nome: {c.Name}, Surname: {c.Surname}, Ordini: {c.orders.Count}");
+                }
+            }
+            return result;
+        }
+
+        private static void EditCustomer()
+        {
+            FetchCustomers();
+            string codiceCus = string.Empty;
+            do
+            {
+                Console.WriteLine("Scegli codice del customer che vorresti modificare:");
+                codiceCus = Console.ReadLine();
+
+            } while (string.IsNullOrEmpty(codiceCus));
+
+            string nameCustomer = GetDataCustomer("name");
+            string surnameCustomer = GetDataCustomer("surname");
+            List<Order> allOrders = new List<Order>();
+
+            HttpClient client = new HttpClient();
+            HttpRequestMessage postRequest = new HttpRequestMessage
+            {
+                Method = HttpMethod.Put,
+                RequestUri = new Uri($"https://localhost:44371/api/customer/{codiceCus}")
+            };
+
+            CustomerContract updateCustomer = new CustomerContract()
+            {
+                CustomerCode = codiceCus,
+                Name = nameCustomer,
+                Surname = surnameCustomer,
+                orders = allOrders,
+            };
+            string updateCustomerJson = JsonConvert.SerializeObject(updateCustomer);
+
+            postRequest.Content = new StringContent(
+                updateCustomerJson,
+                Encoding.UTF8,
+                "application/json"
+            );
+
+            HttpResponseMessage editResponse = client.SendAsync(postRequest).Result;
+            if (editResponse.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                string data = editResponse.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<CustomerContract>(data);
+
+                Console.WriteLine($"Customer modificato con successo, con Codice: {result.CustomerCode}");
+            }
+        }
+
+        private static void DeleteCustomer()
+        {
+            string customerToDelete = string.Empty;
+            do
+            {
+                Console.WriteLine("Scegli codice del customer che vuoi cancellare:");
+                customerToDelete = Console.ReadLine();
+
+            } while (string.IsNullOrEmpty(customerToDelete));
+
+            HttpClient client = new HttpClient();
+            HttpRequestMessage postRequest = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri($"https://localhost:44371/api/customer/{customerToDelete}")
+            };
+            HttpResponseMessage postResponse = client.SendAsync(postRequest).Result;
+            if (postResponse.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                Console.WriteLine("Customer cancellato!");
+            }
+        }
+
+        private static void AddNewCustomer()
+        {
+            string codiceCustomer = GetDataCustomer("codice customer");
+            string nameCustomer = GetDataCustomer("name");
+            string surnameCustomer = GetDataCustomer("surname");
+            List<Order> allOrders = new List<Order>();
+
+            HttpClient client = new HttpClient();
+            HttpRequestMessage postRequest = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri("https://localhost:44371/api/customer")
+            };
+
+            CustomerContract newCustomer = new CustomerContract()
+            {
+                CustomerCode = codiceCustomer,
+                Name = nameCustomer,
+                Surname = surnameCustomer,
+                orders = allOrders,
+            };
+            string newCustomerJson = JsonConvert.SerializeObject(newCustomer);
+
+            postRequest.Content = new StringContent(
+                newCustomerJson,
+                Encoding.UTF8,
+                "application/json"
+            );
+
+            HttpResponseMessage postResponse = client.SendAsync(postRequest).Result;
+            if (postResponse.StatusCode == System.Net.HttpStatusCode.Created)
+            {
+                string data = postResponse.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<CustomerContract>(data);
+
+                Console.WriteLine($"Customer aggiunto con successo, con Codice: {result.CustomerCode}");
+            }
+        }
+
+        private static string GetDataCustomer(string data)
+        {
+            string dataCustomer = string.Empty;
+            do
+            {
+                Console.WriteLine($"Inserisci {data}:");
+                dataCustomer = Console.ReadLine();
+
+            } while (string.IsNullOrEmpty(dataCustomer));
+            return dataCustomer;
         }
 
         private static void EditOrder()

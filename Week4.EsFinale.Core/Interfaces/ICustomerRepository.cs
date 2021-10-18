@@ -7,5 +7,7 @@ namespace Week4.EsFinale.Core.Interfaces
 {
     public interface ICustomerRepository : IRepository<Customer>
     {
+        Customer GetByCode(string codiceCustomer);
+        bool UpdateCustomer(Customer editedCustomer, Customer customerCode);
     }
 }

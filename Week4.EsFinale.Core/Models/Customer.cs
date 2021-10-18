@@ -31,5 +31,10 @@ namespace Week4.EsFinale.Core.Models
 
         //}
         public Customer() { }
+
+        internal bool UpdateCustomer(Customer editedCustomer, Customer customerCode)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

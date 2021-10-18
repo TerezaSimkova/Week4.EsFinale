@@ -47,6 +47,12 @@ namespace Week4.EsFinale.EF.Repositories
             return ctx.Customers.Include(c => c.orders).ToList();
         }
 
+        public Customer GetByCode(string codiceCustomer)
+        {
+            Customer customer = ctx.Customers.FirstOrDefault(c => c.CustomerCode == codiceCustomer);
+            return customer;
+        }
+
         public Customer GetById(int id)
         {
             return ctx.Customers.FirstOrDefault(o => o.Id == id);
@@ -58,6 +64,17 @@ namespace Week4.EsFinale.EF.Repositories
             oldCustomer.Name = item.Name;
             oldCustomer.Surname = item.Surname;
             oldCustomer.CustomerCode = item.CustomerCode;
+            ctx.SaveChanges();
+            return true;
+        }
+
+        public bool UpdateCustomer(Customer editedCustomer, Customer customerCode)
+        {
+            var oldCustomer = ctx.Customers.FirstOrDefault(p => p.CustomerCode == customerCode.CustomerCode);
+            oldCustomer.Name = editedCustomer.Name;
+            oldCustomer.Surname = editedCustomer.Surname;
+            oldCustomer.CustomerCode = customerCode.CustomerCode;
+            customerCode.orders = oldCustomer.orders;
             ctx.SaveChanges();
             return true;
         }
